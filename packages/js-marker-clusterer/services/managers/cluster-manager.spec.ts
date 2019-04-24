@@ -1,8 +1,7 @@
 import {NgZone} from '@angular/core';
 import {TestBed, async, inject} from '@angular/core/testing';
 
-import {AgmMarker} from '../../../core/directives/marker';
-import {GoogleMapsAPIWrapper} from '../../../core/services/google-maps-api-wrapper';
+import {AgmMarker, GoogleMapsAPIWrapper} from '@agm/core';
 import {AgmMarkerCluster} from '../../directives/marker-cluster';
 import {ClusterManager} from './cluster-manager';
 
