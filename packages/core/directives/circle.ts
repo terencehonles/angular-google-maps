@@ -1,9 +1,8 @@
+/// <reference types="@types/googlemaps" />
 import {Directive, EventEmitter, OnChanges, OnDestroy, OnInit, SimpleChange, Input, Output} from '@angular/core';
 import {Subscription} from 'rxjs';
 
 import {MouseEvent} from '../map-types';
-import {LatLng, LatLngBounds, LatLngLiteral} from '../services/google-maps-types';
-import {MouseEvent as MapMouseEvent} from '../services/google-maps-types';
 import {CircleManager} from '../services/managers/circle-manager';
 
 @Directive({
@@ -66,7 +65,7 @@ export class AgmCircle implements OnInit, OnChanges, OnDestroy {
    * The stroke position. Defaults to CENTER.
    * This property is not supported on Internet Explorer 8 and earlier.
    */
-  @Input() strokePosition: 'CENTER'|'INSIDE'|'OUTSIDE' = 'CENTER';
+  @Input() strokePosition: google.maps.StrokePosition | keyof typeof google.maps.StrokePosition = 'CENTER';
 
   /**
    * The stroke width in pixels.
@@ -86,7 +85,7 @@ export class AgmCircle implements OnInit, OnChanges, OnDestroy {
   /**
    * This event is fired when the circle's center is changed.
    */
-  @Output() centerChange: EventEmitter<LatLngLiteral> = new EventEmitter<LatLngLiteral>();
+  @Output() centerChange: EventEmitter<google.maps.LatLngLiteral> = new EventEmitter<google.maps.LatLngLiteral>();
 
   /**
    * This event emitter gets emitted when the user clicks on the circle.
@@ -194,6 +193,11 @@ export class AgmCircle implements OnInit, OnChanges, OnDestroy {
     let optionKeys =
         Object.keys(changes).filter(k => AgmCircle._mapOptions.indexOf(k) !== -1);
     optionKeys.forEach((k) => { options[k] = changes[k].currentValue; });
+
+    if (typeof options.strokePosition === 'string') {
+      options.strokePosition = google.maps.StrokePosition[options.strokePosition as keyof typeof google.maps.StrokePosition];
+    }
+
     if (optionKeys.length > 0) {
       this._manager.setOptions(this, options);
     }
@@ -217,7 +221,7 @@ export class AgmCircle implements OnInit, OnChanges, OnDestroy {
 
     events.forEach((eventEmitter, eventName) => {
       this._eventSubscriptions.push(
-          this._manager.createEventObservable<MapMouseEvent>(eventName, this).subscribe((value) => {
+          this._manager.createEventObservable<google.maps.MouseEvent>(eventName, this).subscribe((value) => {
             switch (eventName) {
               case 'radius_changed':
                 this._manager.getRadius(this).then((radius) => eventEmitter.emit(radius));
@@ -225,7 +229,7 @@ export class AgmCircle implements OnInit, OnChanges, OnDestroy {
               case 'center_changed':
                 this._manager.getCenter(this).then(
                     (center) =>
-                        eventEmitter.emit(<LatLngLiteral>{lat: center.lat(), lng: center.lng()}));
+                        eventEmitter.emit(<google.maps.LatLngLiteral>{lat: center.lat(), lng: center.lng()}));
                 break;
               default:
                 eventEmitter.emit(
@@ -245,7 +249,7 @@ export class AgmCircle implements OnInit, OnChanges, OnDestroy {
   /**
    * Gets the LatLngBounds of this Circle.
    */
-  getBounds(): Promise<LatLngBounds> { return this._manager.getBounds(this); }
+  getBounds(): Promise<google.maps.LatLngBounds> { return this._manager.getBounds(this); }
 
-  getCenter(): Promise<LatLng> { return this._manager.getCenter(this); }
+  getCenter(): Promise<google.maps.LatLng> { return this._manager.getCenter(this); }
 }

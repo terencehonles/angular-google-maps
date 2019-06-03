@@ -1,9 +1,9 @@
+/// <reference types="@types/googlemaps" />
 import { NgZone } from '@angular/core';
 import { TestBed, async, inject } from '@angular/core/testing';
 
 import { AgmRectangle } from './../../directives/rectangle';
 import { GoogleMapsAPIWrapper } from './../google-maps-api-wrapper';
-import { Rectangle } from './../google-maps-types';
 import { RectangleManager } from './../managers/rectangle-manager';
 
 describe('RectangleManager', () => {
@@ -51,7 +51,7 @@ describe('RectangleManager', () => {
           fillOpacity: undefined,
           strokeColor: undefined,
           strokeOpacity: undefined,
-          strokePosition: 'CENTER',
+          strokePosition: 0,
           strokeWeight: 0,
           visible: true,
           zIndex: undefined
@@ -102,7 +102,7 @@ describe('RectangleManager', () => {
           newRectangle.south = 89.2;
           newRectangle.west = 52.6;
 
-          const rectangleInstance: Rectangle = <any>{
+          const rectangleInstance: google.maps.Rectangle = <any>{
             setMap: jest.fn(),
             setBounds: jest.fn()
           };
@@ -125,7 +125,7 @@ describe('RectangleManager', () => {
             fillOpacity: undefined,
             strokeColor: undefined,
             strokeOpacity: undefined,
-            strokePosition: 'CENTER',
+            strokePosition: 0,
             strokeWeight: 0,
             visible: true,
             zIndex: undefined
@@ -190,7 +190,7 @@ describe('RectangleManager', () => {
             fillOpacity: 0.4,
             strokeColor: undefined,
             strokeOpacity: 0.4,
-            strokePosition: 'CENTER',
+            strokePosition: 0,
             strokeWeight: 0,
             visible: true,
             zIndex: undefined
@@ -250,7 +250,7 @@ describe('RectangleManager', () => {
             fillOpacity: undefined,
             strokeColor: '#FF7F50',
             strokeOpacity: undefined,
-            strokePosition: 'CENTER',
+            strokePosition: 0,
             strokeWeight: 0,
             visible: true,
             zIndex: undefined
@@ -309,7 +309,7 @@ describe('RectangleManager', () => {
             fillOpacity: undefined,
             strokeColor: undefined,
             strokeOpacity: undefined,
-            strokePosition: 'CENTER',
+            strokePosition: 0,
             strokeWeight: 0,
             visible: false,
             zIndex: undefined

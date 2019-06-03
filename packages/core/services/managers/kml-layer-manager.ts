@@ -1,19 +1,17 @@
+/// <reference types="@types/googlemaps" />
 import {Injectable, NgZone} from '@angular/core';
 import {Observable, Observer} from 'rxjs';
 
 import {AgmKmlLayer} from './../../directives/kml-layer';
 import {GoogleMapsAPIWrapper} from './../google-maps-api-wrapper';
-import {KmlLayer, KmlLayerOptions} from './../google-maps-types';
-
-declare var google: any;
 
 /**
  * Manages all KML Layers for a Google Map instance.
  */
 @Injectable()
 export class KmlLayerManager {
-  private _layers: Map<AgmKmlLayer, Promise<KmlLayer>> =
-      new Map<AgmKmlLayer, Promise<KmlLayer>>();
+  private _layers: Map<AgmKmlLayer, Promise<google.maps.KmlLayer>> =
+      new Map<AgmKmlLayer, Promise<google.maps.KmlLayer>>();
 
   constructor(private _wrapper: GoogleMapsAPIWrapper, private _zone: NgZone) {}
 
@@ -22,7 +20,7 @@ export class KmlLayerManager {
    */
   addKmlLayer(layer: AgmKmlLayer) {
     const newLayer = this._wrapper.getNativeMap().then(m => {
-      return new google.maps.KmlLayer(<KmlLayerOptions>{
+      return new google.maps.KmlLayer(<google.maps.KmlLayerOptions>{
         clickable: layer.clickable,
         map: m,
         preserveViewport: layer.preserveViewport,
@@ -35,7 +33,7 @@ export class KmlLayerManager {
     this._layers.set(layer, newLayer);
   }
 
-  setOptions(layer: AgmKmlLayer, options: KmlLayerOptions) {
+  setOptions(layer: AgmKmlLayer, options: google.maps.KmlLayerOptions) {
     this._layers.get(layer).then(l => l.setOptions(options));
   }
 
@@ -51,7 +49,7 @@ export class KmlLayerManager {
    */
   createEventObservable<T>(eventName: string, layer: AgmKmlLayer): Observable<T> {
     return new Observable((observer: Observer<T>) => {
-      this._layers.get(layer).then((m: KmlLayer) => {
+      this._layers.get(layer).then((m: google.maps.KmlLayer) => {
         m.addListener(eventName, (e: T) => this._zone.run(() => observer.next(e)));
       });
     });

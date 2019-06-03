@@ -1,9 +1,8 @@
 import { Directive, OnInit, Self, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { FitBoundsService, FitBoundsAccessor, FitBoundsDetails } from '../services/fit-bounds';
-import { LatLng, LatLngLiteral } from '../services/google-maps-types';
 
 /**
  * Adds the given directive to the auto fit bounds feature when the value is true.

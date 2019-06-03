@@ -1,8 +1,8 @@
+/// <reference types="@types/googlemaps" />
 import { TestBed, fakeAsync, tick, discardPeriodicTasks } from '@angular/core/testing';
 import { FitBoundsService } from './fit-bounds';
-import { LatLngBounds } from './google-maps-types';
 import { MapsAPILoader } from './maps-api-loader/maps-api-loader';
-import { take, first } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 
 describe('FitBoundsService', () => {
   let loader: MapsAPILoader;

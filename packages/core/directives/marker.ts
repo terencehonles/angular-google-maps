@@ -1,9 +1,8 @@
+/// <reference types="@types/googlemaps" />
 import { AfterContentInit, ContentChildren, Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChange, forwardRef } from '@angular/core';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { MarkerLabel, MouseEvent } from '../map-types';
+import { MouseEvent } from '../map-types';
 import { FitBoundsAccessor, FitBoundsDetails } from '../services/fit-bounds';
-import * as mapTypes from '../services/google-maps-types';
 import { MarkerManager } from '../services/managers/marker-manager';
 import { AgmInfoWindow } from './info-window';
 
@@ -62,7 +61,7 @@ export class AgmMarker implements OnDestroy, OnChanges, AfterContentInit, FitBou
   /**
    * The label (a single uppercase character) for the marker.
    */
-  @Input() label: string | MarkerLabel;
+  @Input() label: string | google.maps.MarkerLabel;
 
   /**
    * If true, the marker can be dragged. Default value is false.
@@ -246,36 +245,36 @@ export class AgmMarker implements OnDestroy, OnChanges, AfterContentInit, FitBou
     this._observableSubscriptions.push(rc);
 
     const ds =
-        this._markerManager.createEventObservable<mapTypes.MouseEvent>('dragstart', this)
-            .subscribe((e: mapTypes.MouseEvent) => {
+        this._markerManager.createEventObservable<google.maps.MouseEvent>('dragstart', this)
+            .subscribe((e: google.maps.MouseEvent) => {
               this.dragStart.emit(<MouseEvent>{coords: {lat: e.latLng.lat(), lng: e.latLng.lng()}});
             });
     this._observableSubscriptions.push(ds);
 
     const d =
-        this._markerManager.createEventObservable<mapTypes.MouseEvent>('drag', this)
-            .subscribe((e: mapTypes.MouseEvent) => {
+        this._markerManager.createEventObservable<google.maps.MouseEvent>('drag', this)
+            .subscribe((e: google.maps.MouseEvent) => {
               this.drag.emit(<MouseEvent>{coords: {lat: e.latLng.lat(), lng: e.latLng.lng()}});
             });
     this._observableSubscriptions.push(d);
 
     const de =
-        this._markerManager.createEventObservable<mapTypes.MouseEvent>('dragend', this)
-            .subscribe((e: mapTypes.MouseEvent) => {
+        this._markerManager.createEventObservable<google.maps.MouseEvent>('dragend', this)
+            .subscribe((e: google.maps.MouseEvent) => {
               this.dragEnd.emit(<MouseEvent>{coords: {lat: e.latLng.lat(), lng: e.latLng.lng()}});
             });
     this._observableSubscriptions.push(de);
 
     const mover =
-        this._markerManager.createEventObservable<mapTypes.MouseEvent>('mouseover', this)
-            .subscribe((e: mapTypes.MouseEvent) => {
+        this._markerManager.createEventObservable<google.maps.MouseEvent>('mouseover', this)
+            .subscribe((e: google.maps.MouseEvent) => {
               this.mouseOver.emit(<MouseEvent>{coords: {lat: e.latLng.lat(), lng: e.latLng.lng()}});
             });
     this._observableSubscriptions.push(mover);
 
     const mout =
-        this._markerManager.createEventObservable<mapTypes.MouseEvent>('mouseout', this)
-            .subscribe((e: mapTypes.MouseEvent) => {
+        this._markerManager.createEventObservable<google.maps.MouseEvent>('mouseout', this)
+            .subscribe((e: google.maps.MouseEvent) => {
               this.mouseOut.emit(<MouseEvent>{coords: {lat: e.latLng.lat(), lng: e.latLng.lng()}});
             });
     this._observableSubscriptions.push(mout);
