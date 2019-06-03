@@ -1,5 +1,5 @@
 /// <reference types="@types/googlemaps" />
-import { Directive, EventEmitter, OnDestroy, OnInit, OnChanges, SimpleChanges, Input, Output } from '@angular/core';
+import { Directive, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { DataLayerManager } from './../services/managers/data-layer-manager';
@@ -197,7 +197,7 @@ let layerId = 0;
  * ```
  */
 @Directive({
-  selector: 'agm-data-layer'
+  selector: 'agm-data-layer',
 })
 export class AgmDataLayer implements OnInit, OnDestroy, OnChanges {
   private static _dataOptionsAttributes: string[] = ['style'];
@@ -268,7 +268,7 @@ export class AgmDataLayer implements OnInit, OnDestroy, OnChanges {
 
     let dataOptions: google.maps.Data.DataOptions = {};
 
-    AgmDataLayer._dataOptionsAttributes.forEach(k => (<any>dataOptions)[k] = changes.hasOwnProperty(k) ? changes[k].currentValue : (<any>this)[k]);
+    AgmDataLayer._dataOptionsAttributes.forEach(k => (dataOptions as any)[k] = changes.hasOwnProperty(k) ? changes[k].currentValue : (this as any)[k]);
 
     this._manager.setDataOptions(this, dataOptions);
   }

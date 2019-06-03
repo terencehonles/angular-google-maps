@@ -1,8 +1,8 @@
-import { Component, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, SimpleChange, Output, Input } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core';
 
-import {InfoWindowManager} from '../services/managers/info-window-manager';
+import { InfoWindowManager } from '../services/managers/info-window-manager';
 
-import {AgmMarker} from './marker';
+import { AgmMarker } from './marker';
 
 let infoWindowId = 0;
 
@@ -37,7 +37,7 @@ let infoWindowId = 0;
   template: `<div class='agm-info-window-content'>
       <ng-content></ng-content>
     </div>
-  `
+  `,
 })
 export class AgmInfoWindow implements OnDestroy, OnChanges, OnInit {
   /**

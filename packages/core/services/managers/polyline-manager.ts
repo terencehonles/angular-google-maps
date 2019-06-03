@@ -1,11 +1,11 @@
 /// <reference types="@types/googlemaps" />
-import {Injectable, NgZone} from '@angular/core';
-import {Observable, Observer} from 'rxjs';
+import { Injectable, NgZone } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
 
-import {AgmPolyline, PathEvent} from '../../directives/polyline';
-import {AgmPolylinePoint} from '../../directives/polyline-point';
-import {GoogleMapsAPIWrapper} from '../google-maps-api-wrapper';
+import { AgmPolyline, PathEvent } from '../../directives/polyline';
+import { AgmPolylinePoint } from '../../directives/polyline-point';
 import { createMVCEventObservable } from '../../utils/mvcarray-utils';
+import { GoogleMapsAPIWrapper } from '../google-maps-api-wrapper';
 
 @Injectable()
 export class PolylineManager {
@@ -16,7 +16,7 @@ export class PolylineManager {
 
   private static _convertPoints(line: AgmPolyline): google.maps.LatLngLiteral[] {
     const path = line._getPoints().map((point: AgmPolylinePoint) => {
-      return <google.maps.LatLngLiteral>{lat: point.latitude, lng: point.longitude};
+      return {lat: point.latitude, lng: point.longitude} as google.maps.LatLngLiteral;
     });
     return path;
   }
@@ -33,7 +33,7 @@ export class PolylineManager {
       strokeWeight: line.strokeWeight,
       visible: line.visible,
       zIndex: line.zIndex,
-      path: path
+      path: path,
     });
     this._polylines.set(line, polylinePromise);
   }

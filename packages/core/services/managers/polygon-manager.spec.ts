@@ -1,10 +1,10 @@
 /// <reference types="@types/googlemaps" />
-import {NgZone} from '@angular/core';
-import {TestBed, inject} from '@angular/core/testing';
+import { NgZone } from '@angular/core';
+import { inject, TestBed } from '@angular/core/testing';
 
-import {AgmPolygon} from '../../directives/polygon';
-import {GoogleMapsAPIWrapper} from '../google-maps-api-wrapper';
-import {PolygonManager} from './polygon-manager';
+import { AgmPolygon } from '../../directives/polygon';
+import { GoogleMapsAPIWrapper } from '../google-maps-api-wrapper';
+import { PolygonManager } from './polygon-manager';
 
 export class MvcArrayMock<T> implements google.maps.MVCArray<T> {
   private vals: T[] = [];
@@ -65,7 +65,7 @@ export class MvcArrayMock<T> implements google.maps.MVCArray<T> {
     return {
         remove: () => {
             listenerArr.splice(listenerArr.indexOf(handler), 1);
-        }
+        },
     };
   }
 
@@ -87,10 +87,10 @@ describe('PolygonManager', () => {
         PolygonManager, AgmPolygon, {
           provide: GoogleMapsAPIWrapper,
           useValue: {
-            createPolygon: jest.fn()
-          }
-        }
-      ]
+            createPolygon: jest.fn(),
+          },
+        },
+      ],
     });
   });
 
@@ -114,7 +114,7 @@ describe('PolygonManager', () => {
                strokeOpacity: undefined,
                strokeWeight: undefined,
                visible: undefined,
-               zIndex: undefined
+               zIndex: undefined,
              });
            }));
   });
@@ -127,9 +127,9 @@ describe('PolygonManager', () => {
              const newPolygon = new AgmPolygon(polygonManager);
 
              const polygonInstance: any = {
-              setMap: jest.fn()
+              setMap: jest.fn(),
              };
-             (<jest.Mock>apiWrapper.createPolygon).mockReturnValue(Promise.resolve(polygonInstance));
+             (apiWrapper.createPolygon as jest.Mock).mockReturnValue(Promise.resolve(polygonInstance));
 
              polygonManager.addPolygon(newPolygon);
              polygonManager.deletePolygon(newPolygon).then(() => {
@@ -156,7 +156,7 @@ describe('PolygonManager', () => {
           getPaths: () => paths,
           setMap: jest.fn(),
         };
-        (<jest.Mock>apiWrapper.createPolygon).mockReturnValue(Promise.resolve(polygonInstance));
+        (apiWrapper.createPolygon as jest.Mock).mockReturnValue(Promise.resolve(polygonInstance));
         newPolygon = new AgmPolygon(polygonManager);
         polygonManager.addPolygon(newPolygon);
     }));

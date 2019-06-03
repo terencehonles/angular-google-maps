@@ -1,9 +1,9 @@
-import {Directive, Input, OnDestroy, OnChanges, OnInit, SimpleChange} from '@angular/core';
+import { Directive, Input, OnChanges, OnDestroy, OnInit, SimpleChange } from '@angular/core';
 
-import {ClusterManager} from '../services/managers/cluster-manager';
-import {MarkerManager, InfoWindowManager} from '@agm/core';
+import { InfoWindowManager, MarkerManager } from '@agm/core';
+import { ClusterManager } from '../services/managers/cluster-manager';
 
-import {CalculateFunction, ClusterOptions, ClusterStyle} from '../services/google-clusterer-types';
+import { CalculateFunction, ClusterOptions, ClusterStyle } from '../services/google-clusterer-types';
 
 /**
  * AgmMarkerCluster clusters map marker if they are near together
@@ -38,7 +38,7 @@ import {CalculateFunction, ClusterOptions, ClusterStyle} from '../services/googl
     ClusterManager,
     {provide: MarkerManager, useExisting: ClusterManager},
     InfoWindowManager,
-  ]
+  ],
 })
 export class AgmMarkerCluster implements OnDestroy, OnChanges, OnInit, ClusterOptions {
   /**

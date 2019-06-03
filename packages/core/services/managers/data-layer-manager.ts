@@ -19,9 +19,9 @@ export class DataLayerManager {
    * Adds a new Data Layer to the map.
    */
   addDataLayer(layer: AgmDataLayer) {
-    const newLayer = this._wrapper.createDataLayer(<google.maps.Data.DataOptions>{
-      style: layer.style
-    })
+    const newLayer = this._wrapper.createDataLayer({
+      style: layer.style,
+    } as google.maps.Data.DataOptions)
     .then(d => {
       if (layer.geoJson) {
         // NOTE: accessing "features" on google.maps.Data is undocumented

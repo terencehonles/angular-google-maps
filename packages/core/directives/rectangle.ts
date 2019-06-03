@@ -2,19 +2,19 @@
 import {
   Directive,
   EventEmitter,
+  Input,
   OnChanges,
   OnDestroy,
   OnInit,
+  Output,
   SimpleChange,
-  Input,
-  Output
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MouseEvent } from '../map-types';
 import { RectangleManager } from '../services/managers/rectangle-manager';
 
 @Directive({
-  selector: 'agm-rectangle'
+  selector: 'agm-rectangle',
 })
 export class AgmRectangle implements OnInit, OnChanges, OnDestroy {
   /**
@@ -176,7 +176,7 @@ export class AgmRectangle implements OnInit, OnChanges, OnDestroy {
     'strokeWeight',
     'visible',
     'zIndex',
-    'clickable'
+    'clickable',
   ];
 
   private _eventSubscriptions: Subscription[] = [];
@@ -220,7 +220,7 @@ export class AgmRectangle implements OnInit, OnChanges, OnDestroy {
   }) {
     let options: { [propName: string]: any } = {};
     let optionKeys = Object.keys(changes).filter(
-      k => AgmRectangle._mapOptions.indexOf(k) !== -1
+      k => AgmRectangle._mapOptions.indexOf(k) !== -1,
     );
     optionKeys.forEach(k => {
       options[k] = changes[k].currentValue;
@@ -261,20 +261,20 @@ export class AgmRectangle implements OnInit, OnChanges, OnDestroy {
             switch (eventName) {
               case 'bounds_changed':
                 this._manager.getBounds(this).then(bounds =>
-                  eventEmitter.emit(<google.maps.LatLngBoundsLiteral>{
+                  eventEmitter.emit({
                     north: bounds.getNorthEast().lat(),
                     east: bounds.getNorthEast().lng(),
                     south: bounds.getSouthWest().lat(),
-                    west: bounds.getSouthWest().lng()
-                  })
+                    west: bounds.getSouthWest().lng(),
+                  } as google.maps.LatLngBoundsLiteral),
                 );
                 break;
               default:
-                eventEmitter.emit(<MouseEvent>{
-                  coords: { lat: value.latLng.lat(), lng: value.latLng.lng() }
-                });
+                eventEmitter.emit({
+                  coords: { lat: value.latLng.lat(), lng: value.latLng.lng() },
+                } as MouseEvent);
             }
-          })
+          }),
       );
     });
   }

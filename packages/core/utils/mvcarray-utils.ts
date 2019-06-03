@@ -1,5 +1,5 @@
 /// <reference types="@types/googlemaps" />
-import { Observable, fromEventPattern } from 'rxjs';
+import { fromEventPattern, Observable } from 'rxjs';
 
 export function createMVCEventObservable<T>(array: google.maps.MVCArray<T>): Observable<MVCEvent<T>>{
   const eventNames = ['insert_at', 'remove_at', 'set_at'];

@@ -1,11 +1,11 @@
 /// <reference types="@types/googlemaps" />
-import {Injectable, NgZone} from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 
 import 'js-marker-clusterer';
 
-import {AgmMarker, GoogleMapsAPIWrapper, MarkerManager} from '@agm/core';
-import {AgmMarkerCluster} from '../../directives/marker-cluster';
-import {MarkerClustererInstance, ClusterOptions} from '../google-clusterer-types';
+import { AgmMarker, GoogleMapsAPIWrapper, MarkerManager } from '@agm/core';
+import { AgmMarkerCluster } from '../../directives/marker-cluster';
+import { ClusterOptions, MarkerClustererInstance } from '../google-clusterer-types';
 
 declare var MarkerClusterer: any;
 
@@ -38,7 +38,7 @@ export class ClusterManager extends MarkerManager {
       .createMarker({
         position: {
           lat: marker.latitude,
-          lng: marker.longitude
+          lng: marker.longitude,
         },
         label: marker.label,
         draggable: marker.draggable,

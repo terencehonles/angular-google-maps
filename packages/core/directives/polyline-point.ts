@@ -1,5 +1,5 @@
 /// <reference types="@types/googlemaps" />
-import {Directive, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import { Directive, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 /**
  * AgmPolylinePoint represents one element of a polyline within a  {@link
@@ -26,10 +26,10 @@ export class AgmPolylinePoint implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): any {
     if (changes['latitude'] || changes['longitude']) {
-      const position: google.maps.LatLngLiteral = <google.maps.LatLngLiteral>{
+      const position: google.maps.LatLngLiteral = {
         lat: changes['latitude'].currentValue,
-        lng: changes['longitude'].currentValue
-      };
+        lng: changes['longitude'].currentValue,
+      } as google.maps.LatLngLiteral;
       this.positionChanged.emit(position);
     }
   }

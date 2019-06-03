@@ -1,5 +1,5 @@
 /// <reference types="@types/googlemaps" />
-import { AfterContentInit, ContentChildren, Directive, EventEmitter, OnChanges, OnDestroy, QueryList, SimpleChanges, Input, Output } from '@angular/core';
+import { AfterContentInit, ContentChildren, Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { PolylineManager } from '../services/managers/polyline-manager';
@@ -35,7 +35,7 @@ let polylineId = 0;
  * ```
  */
 @Directive({
-  selector: 'agm-polyline'
+  selector: 'agm-polyline',
 })
 export class AgmPolyline implements OnDestroy, OnChanges, AfterContentInit {
   /**
@@ -156,7 +156,7 @@ export class AgmPolyline implements OnDestroy, OnChanges, AfterContentInit {
 
   private static _polylineOptionsAttributes: string[] = [
     'draggable', 'editable', 'visible', 'geodesic', 'strokeColor', 'strokeOpacity', 'strokeWeight',
-    'zIndex'
+    'zIndex',
   ];
 
   private _id: string;

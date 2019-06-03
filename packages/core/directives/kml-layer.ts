@@ -1,13 +1,13 @@
 /// <reference types="@types/googlemaps" />
-import { Directive, EventEmitter, OnChanges, OnDestroy, OnInit, SimpleChanges, Input, Output } from '@angular/core';
-import {Subscription} from 'rxjs';
+import { Directive, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import {KmlLayerManager} from './../services/managers/kml-layer-manager';
+import { KmlLayerManager } from './../services/managers/kml-layer-manager';
 
 let layerId = 0;
 
 @Directive({
-  selector: 'agm-kml-layer'
+  selector: 'agm-kml-layer',
 })
 export class AgmKmlLayer implements OnInit, OnDestroy, OnChanges {
   private _addedToManager: boolean = false;
@@ -47,7 +47,7 @@ export class AgmKmlLayer implements OnInit, OnDestroy, OnChanges {
   /**
    * The z-index of the layer.
    */
-  @Input() zIndex: number|null = null;
+  @Input() zIndex: number | null = null;
 
   /**
    * This event is fired when a feature in the layer is clicked.

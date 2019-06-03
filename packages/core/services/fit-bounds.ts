@@ -1,12 +1,12 @@
 /// <reference types="@types/googlemaps" />
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, from, timer } from 'rxjs';
+import { BehaviorSubject, from, Observable, timer } from 'rxjs';
 import {
   flatMap,
   map,
   sample,
+  shareReplay,
   switchMap,
-  shareReplay
 } from 'rxjs/operators';
 import { MapsAPILoader } from './maps-api-loader/maps-api-loader';
 
@@ -40,15 +40,15 @@ export class FitBoundsService {
     this.bounds$ = from(loader.load()).pipe(
       flatMap(() => this._includeInBounds$),
       sample(
-        this._boundsChangeSampleTime$.pipe(switchMap(time => timer(0, time)))
+        this._boundsChangeSampleTime$.pipe(switchMap(time => timer(0, time))),
       ),
       map(includeInBounds => this._generateBounds(includeInBounds)),
-      shareReplay(1)
+      shareReplay(1),
     );
   }
 
   private _generateBounds(
-    includeInBounds: Map<string, google.maps.LatLng | google.maps.LatLngLiteral>
+    includeInBounds: Map<string, google.maps.LatLng | google.maps.LatLngLiteral>,
   ) {
     const bounds = new google.maps.LatLngBounds();
     includeInBounds.forEach(b => bounds.extend(b));

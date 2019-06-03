@@ -1,10 +1,10 @@
 /// <reference types="@types/googlemaps" />
-import {Injectable, NgZone} from '@angular/core';
-import {Observable, Observer} from 'rxjs';
+import { Injectable, NgZone } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
 
-import {AgmMarker} from './../../directives/marker';
+import { AgmMarker } from './../../directives/marker';
 
-import {GoogleMapsAPIWrapper} from './../google-maps-api-wrapper';
+import { GoogleMapsAPIWrapper } from './../google-maps-api-wrapper';
 
 @Injectable()
 export class MarkerManager {
@@ -85,7 +85,7 @@ export class MarkerManager {
       zIndex: marker.zIndex,
       title: marker.title,
       clickable: marker.clickable,
-      animation: (typeof marker.animation === 'string') ? google.maps.Animation[marker.animation] : marker.animation
+      animation: (typeof marker.animation === 'string') ? google.maps.Animation[marker.animation] : marker.animation,
     });
 
     this._markers.set(marker, markerPromise);

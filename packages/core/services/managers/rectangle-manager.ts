@@ -1,10 +1,10 @@
 /// <reference types="@types/googlemaps" />
-import {Injectable, NgZone} from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 
-import {Observable, Observer} from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 
-import {AgmRectangle} from '../../directives/rectangle';
-import {GoogleMapsAPIWrapper} from '../google-maps-api-wrapper';
+import { AgmRectangle } from '../../directives/rectangle';
+import { GoogleMapsAPIWrapper } from '../google-maps-api-wrapper';
 
 @Injectable()
 export class RectangleManager {
@@ -19,7 +19,7 @@ export class RectangleManager {
         north: rectangle.north,
         east: rectangle.east,
         south: rectangle.south,
-        west: rectangle.west
+        west: rectangle.west,
       },
       clickable: rectangle.clickable,
       draggable: rectangle.draggable,
@@ -32,7 +32,7 @@ export class RectangleManager {
         ? google.maps.StrokePosition[rectangle.strokePosition] : rectangle.strokePosition,
       strokeWeight: rectangle.strokeWeight,
       visible: rectangle.visible,
-      zIndex: rectangle.zIndex
+      zIndex: rectangle.zIndex,
     }));
   }
 
@@ -60,7 +60,7 @@ export class RectangleManager {
         north: rectangle.north,
         east: rectangle.east,
         south: rectangle.south,
-        west: rectangle.west
+        west: rectangle.west,
       });
     });
   }

@@ -1,12 +1,12 @@
 /// <reference types="@types/googlemaps" />
-import {Directive, EventEmitter, OnChanges, OnDestroy, OnInit, SimpleChange, Input, Output} from '@angular/core';
-import {Subscription} from 'rxjs';
+import { Directive, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import {MouseEvent} from '../map-types';
-import {CircleManager} from '../services/managers/circle-manager';
+import { MouseEvent } from '../map-types';
+import { CircleManager } from '../services/managers/circle-manager';
 
 @Directive({
-  selector: 'agm-circle'
+  selector: 'agm-circle',
 })
 export class AgmCircle implements OnInit, OnChanges, OnDestroy {
   /**
@@ -151,7 +151,7 @@ export class AgmCircle implements OnInit, OnChanges, OnDestroy {
 
   private static _mapOptions: string[] = [
     'fillColor', 'fillOpacity', 'strokeColor', 'strokeOpacity', 'strokePosition', 'strokeWeight',
-    'visible', 'zIndex', 'clickable'
+    'visible', 'zIndex', 'clickable',
   ];
 
   private _eventSubscriptions: Subscription[] = [];
@@ -229,11 +229,11 @@ export class AgmCircle implements OnInit, OnChanges, OnDestroy {
               case 'center_changed':
                 this._manager.getCenter(this).then(
                     (center) =>
-                        eventEmitter.emit(<google.maps.LatLngLiteral>{lat: center.lat(), lng: center.lng()}));
+                        eventEmitter.emit({lat: center.lat(), lng: center.lng()} as google.maps.LatLngLiteral));
                 break;
               default:
                 eventEmitter.emit(
-                    <MouseEvent>{coords: {lat: value.latLng.lat(), lng: value.latLng.lng()}});
+                    {coords: {lat: value.latLng.lat(), lng: value.latLng.lng()}} as MouseEvent);
             }
           }));
     });

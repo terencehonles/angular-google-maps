@@ -1,5 +1,5 @@
 /// <reference types="@types/googlemaps" />
-import { AfterContentInit, Directive, EventEmitter, OnChanges, OnDestroy, SimpleChanges, Input, Output } from '@angular/core';
+import { AfterContentInit, Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { PolygonManager } from '../services/managers/polygon-manager';
@@ -55,7 +55,7 @@ import { MVCEvent } from '../utils/mvcarray-utils';
  * ```
  */
 @Directive({
-  selector: 'agm-polygon'
+  selector: 'agm-polygon',
 })
 export class AgmPolygon implements OnDestroy, OnChanges, AfterContentInit {
   /**
@@ -198,7 +198,7 @@ export class AgmPolygon implements OnDestroy, OnChanges, AfterContentInit {
   private static _polygonOptionsAttributes: string[] = [
     'clickable', 'draggable', 'editable', 'fillColor', 'fillOpacity', 'geodesic', 'icon', 'map',
     'paths', 'strokeColor', 'strokeOpacity', 'strokeWeight', 'visible', 'zIndex', 'draggable',
-    'editable', 'visible'
+    'editable', 'visible',
   ];
 
   private _id: string;

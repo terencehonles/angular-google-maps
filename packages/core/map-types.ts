@@ -7,6 +7,6 @@ export interface MouseEvent { coords: google.maps.LatLngLiteral; }
 
 /** Options for the restricting the bounds of the map. */
 export interface MapRestriction {
-  latLngBounds: google.maps.LatLngBounds|google.maps.LatLngBoundsLiteral;
+  latLngBounds: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral;
   strictBounds?: boolean;
 }

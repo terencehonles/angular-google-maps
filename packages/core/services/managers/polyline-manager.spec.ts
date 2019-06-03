@@ -1,10 +1,10 @@
 /// <reference types="@types/googlemaps" />
-import {NgZone} from '@angular/core';
-import {TestBed, inject} from '@angular/core/testing';
+import { NgZone } from '@angular/core';
+import { inject, TestBed } from '@angular/core/testing';
 
-import {AgmPolyline} from '../../directives/polyline';
-import {GoogleMapsAPIWrapper} from '../../services/google-maps-api-wrapper';
-import {PolylineManager} from '../../services/managers/polyline-manager';
+import { AgmPolyline } from '../../directives/polyline';
+import { GoogleMapsAPIWrapper } from '../../services/google-maps-api-wrapper';
+import { PolylineManager } from '../../services/managers/polyline-manager';
 
 describe('PolylineManager', () => {
   beforeEach(() => {
@@ -14,10 +14,10 @@ describe('PolylineManager', () => {
         PolylineManager, {
           provide: GoogleMapsAPIWrapper,
           useValue: {
-            createPolyline: jest.fn()
-          }
-        }
-      ]
+            createPolyline: jest.fn(),
+          },
+        },
+      ],
     });
   });
 
@@ -39,7 +39,7 @@ describe('PolylineManager', () => {
                strokeWeight: undefined,
                visible: true,
                zIndex: undefined,
-               path: []
+               path: [],
              });
            }));
   });
@@ -52,9 +52,9 @@ describe('PolylineManager', () => {
              const newPolyline = new AgmPolyline(polylineManager);
 
              const polylineInstance: Partial<google.maps.Polyline> = {
-              setMap: jest.fn()
+              setMap: jest.fn(),
              };
-             (<jest.Mock>apiWrapper.createPolyline).mockReturnValue(Promise.resolve(polylineInstance));
+             (apiWrapper.createPolyline as jest.Mock).mockReturnValue(Promise.resolve(polylineInstance));
 
              polylineManager.addPolyline(newPolyline);
              polylineManager.deletePolyline(newPolyline).then(() => {

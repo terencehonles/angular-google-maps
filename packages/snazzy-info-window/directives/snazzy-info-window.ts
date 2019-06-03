@@ -1,12 +1,12 @@
-import { Host, SkipSelf, OnChanges, AfterViewInit, EventEmitter, Input, SimpleChanges, ViewContainerRef, TemplateRef, Output, Optional, OnDestroy, ElementRef, Component, ViewChild, ContentChild } from '@angular/core';
-import { AgmMarker, GoogleMapsAPIWrapper, MarkerManager, MapsAPILoader } from '@agm/core';
+import { AgmMarker, GoogleMapsAPIWrapper, MapsAPILoader, MarkerManager } from '@agm/core';
+import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, Host, Input, OnChanges, OnDestroy, Optional, Output, SimpleChanges, SkipSelf, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 
 declare var require: any;
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'agm-snazzy-info-window',
-  template: '<div #outerWrapper><div #viewContainer></div></div><ng-content></ng-content>'
+  template: '<div #outerWrapper><div #viewContainer></div></div><ng-content></ng-content>',
 })
 export class AgmSnazzyInfoWindow implements AfterViewInit, OnDestroy, OnChanges {
   /**
@@ -34,17 +34,17 @@ export class AgmSnazzyInfoWindow implements AfterViewInit, OnDestroy, OnChanges 
   /**
    * Choose where you want the info window to be displayed, relative to the marker.
    */
-  @Input() placement: 'top'|'bottom'|'left'|'right' = 'top';
+  @Input() placement: 'top' | 'bottom' | 'left' | 'right' = 'top';
 
   /**
    * The max width in pixels of the info window.
    */
-  @Input() maxWidth: number|string = 200;
+  @Input() maxWidth: number | string = 200;
 
   /**
    * The max height in pixels of the info window.
    */
-  @Input() maxHeight: number|string = 200;
+  @Input() maxHeight: number | string = 200;
 
   /**
    * The color to use for the background of the info window.
@@ -60,7 +60,7 @@ export class AgmSnazzyInfoWindow implements AfterViewInit, OnDestroy, OnChanges 
    * A custom border around the info window. Set to false to completely remove the border.
    * The units used for border should be the same as pointer.
    */
-  @Input() border: {width: string; color: string}|boolean;
+  @Input() border: {width: string; color: string} | boolean;
 
   /**
    * A custom CSS border radius property to specify the rounded corners of the info window.
@@ -82,13 +82,13 @@ export class AgmSnazzyInfoWindow implements AfterViewInit, OnDestroy, OnChanges 
    * Set to false to completely remove the pointer.
    * The units used for pointer should be the same as border.
    */
-  @Input() pointer: string|boolean;
+  @Input() pointer: string | boolean;
 
   /**
    * The CSS properties for the shadow of the info window.
    * Set to false to completely remove the shadow.
    */
-  @Input() shadow: boolean|{h?: string, v?: string, blur: string, spread: string, opacity: number, color: string};
+  @Input() shadow: boolean | {h?: string, v?: string, blur: string, spread: string, opacity: number, color: string};
 
   /**
    * Determines if the info window will open when the marker is clicked.
@@ -149,13 +149,13 @@ export class AgmSnazzyInfoWindow implements AfterViewInit, OnDestroy, OnChanges 
   @ContentChild(TemplateRef, {static: false}) _templateRef: TemplateRef<any>;
 
   protected _nativeSnazzyInfoWindow: any;
-  protected _snazzyInfoWindowInitialized: Promise<any>|null = null;
+  protected _snazzyInfoWindowInitialized: Promise<any> | null = null;
 
   constructor(
     @Optional() @Host() @SkipSelf() private _marker: AgmMarker,
     private _wrapper: GoogleMapsAPIWrapper,
     private _manager: MarkerManager,
-    private _loader: MapsAPILoader
+    private _loader: MapsAPILoader,
   ) {}
 
   /**
@@ -214,15 +214,15 @@ export class AgmSnazzyInfoWindow implements AfterViewInit, OnDestroy, OnChanges 
             afterClose: () => {
               this.afterClose.emit();
               this.isOpenChange.emit(this.openStatus());
-            }
-          }
+            },
+          },
         };
         if (elems[1] != null) {
           options.marker = elems[1];
         } else {
           options.position = {
             lat: this.latitude,
-            lng: this.longitude
+            lng: this.longitude,
           };
         }
         this._nativeSnazzyInfoWindow = new elems[0](options);
@@ -262,7 +262,7 @@ export class AgmSnazzyInfoWindow implements AfterViewInit, OnDestroy, OnChanges 
   protected _updatePosition() {
     this._nativeSnazzyInfoWindow.setPosition({
       lat: this.latitude,
-      lng: this.longitude
+      lng: this.longitude,
     });
   }
 

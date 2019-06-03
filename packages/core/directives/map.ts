@@ -1,20 +1,20 @@
 /// <reference types="@types/googlemaps" />
-import { Component, ElementRef, EventEmitter, OnChanges, OnDestroy, OnInit, SimpleChanges, Input, Output, NgZone } from '@angular/core';
-import {Subscription} from 'rxjs';
+import { Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import {MapRestriction, MouseEvent} from '../map-types';
-import {GoogleMapsAPIWrapper} from '../services/google-maps-api-wrapper';
-import {CircleManager} from '../services/managers/circle-manager';
-import {RectangleManager} from '../services/managers/rectangle-manager';
-import {InfoWindowManager} from '../services/managers/info-window-manager';
-import {MarkerManager} from '../services/managers/marker-manager';
-import {PolygonManager} from '../services/managers/polygon-manager';
-import {PolylineManager} from '../services/managers/polyline-manager';
-import {KmlLayerManager} from './../services/managers/kml-layer-manager';
-import {DataLayerManager} from './../services/managers/data-layer-manager';
-import {FitBoundsService} from '../services/fit-bounds';
+import { MapRestriction, MouseEvent } from '../map-types';
+import { FitBoundsService } from '../services/fit-bounds';
+import { GoogleMapsAPIWrapper } from '../services/google-maps-api-wrapper';
+import { CircleManager } from '../services/managers/circle-manager';
+import { InfoWindowManager } from '../services/managers/info-window-manager';
+import { MarkerManager } from '../services/managers/marker-manager';
+import { PolygonManager } from '../services/managers/polygon-manager';
+import { PolylineManager } from '../services/managers/polyline-manager';
+import { RectangleManager } from '../services/managers/rectangle-manager';
+import { DataLayerManager } from './../services/managers/data-layer-manager';
+import { KmlLayerManager } from './../services/managers/kml-layer-manager';
 
-type MapTypeId = 'roadmap'|'hybrid'|'satellite'|'terrain';
+type MapTypeId = 'roadmap' | 'hybrid' | 'satellite' | 'terrain';
 
 /**
  * AgmMap renders a Google Map.
@@ -44,11 +44,11 @@ type MapTypeId = 'roadmap'|'hybrid'|'satellite'|'terrain';
   providers: [
     GoogleMapsAPIWrapper, MarkerManager, InfoWindowManager, CircleManager, RectangleManager,
     PolylineManager, PolygonManager, KmlLayerManager, DataLayerManager, DataLayerManager,
-    FitBoundsService
+    FitBoundsService,
   ],
   host: {
     // todo: deprecated - we will remove it with the next version
-    '[class.sebm-google-map-container]': 'true'
+    '[class.sebm-google-map-container]': 'true',
   },
   styles: [`
     .agm-map-container-inner {
@@ -64,7 +64,7 @@ type MapTypeId = 'roadmap'|'hybrid'|'satellite'|'terrain';
     <div class='agm-map-content'>
       <ng-content></ng-content>
     </div>
-  `
+  `,
 })
 export class AgmMap implements OnChanges, OnInit, OnDestroy {
   /**
@@ -183,7 +183,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
    * Sets the viewport to contain the given bounds.
    * If this option to `true`, the bounds get automatically computed from all elements that use the {@link AgmFitBounds} directive.
    */
-  @Input() fitBounds: google.maps.LatLngBoundsLiteral|google.maps.LatLngBounds|boolean = false;
+  @Input() fitBounds: google.maps.LatLngBoundsLiteral | google.maps.LatLngBounds | boolean = false;
 
   /**
    * The initial enabled/disabled state of the Scale control. This is disabled by default.
@@ -254,7 +254,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
    * - 'none'        (The map cannot be panned or zoomed by user gestures.)
    * - 'auto'        [default] (Gesture handling is either cooperative or greedy, depending on whether the page is scrollable or not.
    */
-  @Input() gestureHandling: 'cooperative'|'greedy'|'none'|'auto' = 'auto';
+  @Input() gestureHandling: 'cooperative' | 'greedy' | 'none' | 'auto' = 'auto';
 
     /**
      * Controls the automatic switching behavior for the angle of incidence of
@@ -286,7 +286,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
     'streetViewControlOptions', 'zoom', 'mapTypeControl', 'mapTypeControlOptions', 'minZoom',
     'maxZoom', 'panControl', 'panControlOptions', 'rotateControl', 'rotateControlOptions',
     'fullscreenControl', 'fullscreenControlOptions', 'scaleControl', 'scaleControlOptions',
-    'mapTypeId', 'clickableIcons', 'gestureHandling', 'tilt', 'restriction'
+    'mapTypeId', 'clickableIcons', 'gestureHandling', 'tilt', 'restriction',
   ];
 
   private _observableSubscriptions: Subscription[] = [];
@@ -498,7 +498,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
     });
   }
 
-  protected _updateBounds(bounds: google.maps.LatLngBounds|google.maps.LatLngBoundsLiteral) {
+  protected _updateBounds(bounds: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral) {
     if (this._isLatLngBoundsLiteral(bounds) && google && google.maps) {
       const newBounds = new google.maps.LatLngBounds();
       newBounds.union(bounds);
@@ -511,8 +511,8 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
     this._mapsWrapper.fitBounds(bounds);
   }
 
-  private _isLatLngBoundsLiteral(bounds: google.maps.LatLngBounds|google.maps.LatLngBoundsLiteral): bounds is google.maps.LatLngBoundsLiteral {
-    return bounds != null && (<any>bounds).extend === undefined;
+  private _isLatLngBoundsLiteral(bounds: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral): bounds is google.maps.LatLngBoundsLiteral {
+    return bounds != null && (bounds as any).extend === undefined;
   }
 
   private _handleMapCenterChange() {
@@ -520,7 +520,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
       this._mapsWrapper.getCenter().then((center: google.maps.LatLng) => {
         this.latitude = center.lat();
         this.longitude = center.lng();
-        this.centerChange.emit(<google.maps.LatLngLiteral>{lat: this.latitude, lng: this.longitude});
+        this.centerChange.emit({lat: this.latitude, lng: this.longitude} as google.maps.LatLngLiteral);
       });
     });
     this._observableSubscriptions.push(s);
@@ -573,7 +573,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
     events.forEach((e: Event) => {
       const s = this._mapsWrapper.subscribeToMapEvent<{latLng: google.maps.LatLng}>(e.name).subscribe(
           (event: {latLng: google.maps.LatLng}) => {
-            const value = <MouseEvent>{coords: {lat: event.latLng.lat(), lng: event.latLng.lng()}};
+            const value = {coords: {lat: event.latLng.lat(), lng: event.latLng.lng()}} as MouseEvent;
             e.emitter.emit(value);
           });
       this._observableSubscriptions.push(s);
