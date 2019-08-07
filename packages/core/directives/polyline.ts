@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { PolylineManager } from '../services/managers/polyline-manager';
 import { MVCEvent } from '../utils/mvcarray-utils';
 import { AgmPolylinePoint } from './polyline-point';
+import { AgmPolylineIcon } from './polyline-icon';
 
 let polylineId = 0;
 /**
@@ -154,6 +155,8 @@ export class AgmPolyline implements OnDestroy, OnChanges, AfterContentInit {
    */
   @ContentChildren(AgmPolylinePoint) points: QueryList<AgmPolylinePoint>;
 
+  @ContentChildren(AgmPolylineIcon) iconSequences: QueryList<AgmPolylineIcon>;
+
   private static _polylineOptionsAttributes: string[] = [
     'draggable', 'editable', 'visible', 'geodesic', 'strokeColor', 'strokeOpacity', 'strokeWeight',
     'zIndex',
@@ -177,9 +180,12 @@ export class AgmPolyline implements OnDestroy, OnChanges, AfterContentInit {
     if (!this._polylineAddedToManager) {
       this._init();
     }
-    const s = this.points.changes.subscribe(() => this._polylineManager.updatePolylinePoints(this));
-    this._subscriptions.push(s);
+    const pointSub = this.points.changes.subscribe(() => this._polylineManager.updatePolylinePoints(this));
+    this._subscriptions.push(pointSub);
     this._polylineManager.updatePolylinePoints(this);
+
+    const iconSub = this.iconSequences.changes.subscribe(() => this._polylineManager.updateIconSequences(this));
+    this._subscriptions.push(iconSub);
   }
 
   ngOnChanges(changes: SimpleChanges): any {
@@ -234,6 +240,13 @@ export class AgmPolyline implements OnDestroy, OnChanges, AfterContentInit {
   _getPoints(): AgmPolylinePoint[] {
     if (this.points) {
       return this.points.toArray();
+    }
+    return [];
+  }
+
+  _getIcons(): Array<AgmPolylineIcon> {
+    if (this.iconSequences) {
+      return this.iconSequences.toArray();
     }
     return [];
   }

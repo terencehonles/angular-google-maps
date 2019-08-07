@@ -1,20 +1,20 @@
 /// <reference types="@types/googlemaps" />
-import { Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, NgZone, OnChanges,
+  OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { MapRestriction, MouseEvent } from '../map-types';
+import { MouseEvent } from '../map-types';
 import { FitBoundsService } from '../services/fit-bounds';
 import { GoogleMapsAPIWrapper } from '../services/google-maps-api-wrapper';
 import { CircleManager } from '../services/managers/circle-manager';
 import { InfoWindowManager } from '../services/managers/info-window-manager';
+import { LayerManager } from '../services/managers/layer-manager';
 import { MarkerManager } from '../services/managers/marker-manager';
 import { PolygonManager } from '../services/managers/polygon-manager';
 import { PolylineManager } from '../services/managers/polyline-manager';
 import { RectangleManager } from '../services/managers/rectangle-manager';
 import { DataLayerManager } from './../services/managers/data-layer-manager';
 import { KmlLayerManager } from './../services/managers/kml-layer-manager';
-
-type MapTypeId = 'roadmap' | 'hybrid' | 'satellite' | 'terrain';
 
 /**
  * AgmMap renders a Google Map.
@@ -44,7 +44,7 @@ type MapTypeId = 'roadmap' | 'hybrid' | 'satellite' | 'terrain';
   providers: [
     GoogleMapsAPIWrapper, MarkerManager, InfoWindowManager, CircleManager, RectangleManager,
     PolylineManager, PolygonManager, KmlLayerManager, DataLayerManager, DataLayerManager,
-    FitBoundsService,
+    FitBoundsService, LayerManager,
   ],
   host: {
     // todo: deprecated - we will remove it with the next version
@@ -93,6 +93,11 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
    * are enforced.
    */
   @Input() maxZoom: number;
+
+  /**
+   * The control size for the default map controls. Only governs the controls made by the Maps API itself
+   */
+  @Input() controlSize: number;
 
   /**
    * Enables/disables if map is draggable.
@@ -238,13 +243,21 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
   /**
    * The map mapTypeId. Defaults to 'roadmap'.
    */
-  @Input() mapTypeId: MapTypeId = 'roadmap';
+  @Input() mapTypeId: google.maps.MapTypeId | 'hybrid' | 'roadmap' | 'satellite' | 'terrain' = 'roadmap';
 
   /**
    * When false, map icons are not clickable. A map icon represents a point of interest,
    * also known as a POI. By default map icons are clickable.
    */
   @Input() clickableIcons: boolean = true;
+
+  /**
+   * A map icon represents a point of interest, also known as a POI.
+   * When map icons are clickable by default, an info window is displayed.
+   * When this property is set to false, the info window will not be shown but the click event
+   * will still fire
+   */
+  @Input() showDefaultInfoWindow: boolean = true;
 
   /**
    * This setting controls how gestures on the map are handled.
@@ -276,7 +289,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
    * Options for restricting the bounds of the map.
    * User cannot pan or zoom away from restricted area.
    */
-  @Input() restriction: MapRestriction;
+  @Input() restriction: google.maps.MapRestriction;
   /**
    * Map option attributes that can change over time
    */
@@ -323,7 +336,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
   /**
    * This event is fired when the mapTypeId property changes.
    */
-  @Output() mapTypeIdChange: EventEmitter<MapTypeId> = new EventEmitter<MapTypeId>();
+  @Output() mapTypeIdChange: EventEmitter<google.maps.MapTypeId | string> = new EventEmitter<google.maps.MapTypeId | string>();
 
   /**
    * This event is fired when the map becomes idle after panning or zooming.
@@ -341,7 +354,8 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
    */
   @Output() mapReady: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private _elem: ElementRef, private _mapsWrapper: GoogleMapsAPIWrapper, protected _fitBoundsService: FitBoundsService, private _zone: NgZone) {}
+  constructor(private _elem: ElementRef, private _mapsWrapper: GoogleMapsAPIWrapper, protected _fitBoundsService: FitBoundsService, private _zone: NgZone) {
+  }
 
   /** @internal */
   ngOnInit() {
@@ -356,6 +370,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
       zoom: this.zoom,
       minZoom: this.minZoom,
       maxZoom: this.maxZoom,
+      controlSize: this.controlSize,
       disableDefaultUI: this.disableDefaultUI,
       disableDoubleClickZoom: this.disableDoubleClickZoom,
       scrollwheel: this.scrollwheel,
@@ -379,12 +394,12 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
       rotateControlOptions: this.rotateControlOptions,
       fullscreenControl: this.fullscreenControl,
       fullscreenControlOptions: this.fullscreenControlOptions,
-      mapTypeId: (this.mapTypeId as unknown) as google.maps.MapTypeId,
+      mapTypeId: this.mapTypeId,
       clickableIcons: this.clickableIcons,
       gestureHandling: this.gestureHandling,
       tilt: this.tilt,
       restriction: this.restriction,
-    } as google.maps.MapOptions /* TODO: @types/googlemaps MapOptions should include restrictions */)
+    } as google.maps.MapOptions)
       .then(() => this._mapsWrapper.getNativeMap())
       .then(map => this.mapReady.emit(map));
 
@@ -418,7 +433,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
   private _updateMapOptionsChanges(changes: SimpleChanges) {
     let options: {[propName: string]: any} = {};
     let optionKeys =
-        Object.keys(changes).filter(k => AgmMap._mapOptionsAttributes.indexOf(k) !== -1);
+      Object.keys(changes).filter(k => AgmMap._mapOptionsAttributes.indexOf(k) !== -1);
     optionKeys.forEach((k) => { options[k] = changes[k].currentValue; });
     this._mapsWrapper.setMapOptions(options);
   }
@@ -479,14 +494,14 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
     switch (this.fitBounds) {
       case true:
         this._subscribeToFitBoundsUpdates();
-      break;
+        break;
       case false:
         if (this._fitBoundsSubscription) {
           this._fitBoundsSubscription.unsubscribe();
         }
-       break;
-       default:
-       this._updateBounds(this.fitBounds);
+        break;
+      default:
+        this._updateBounds(this.fitBounds);
     }
   }
 
@@ -499,7 +514,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
   }
 
   protected _updateBounds(bounds: google.maps.LatLngBounds | google.maps.LatLngBoundsLiteral) {
-    if (this._isLatLngBoundsLiteral(bounds) && google && google.maps) {
+    if (this._isLatLngBoundsLiteral(bounds) && typeof google !== 'undefined' && google && google.maps && google.maps.LatLngBounds) {
       const newBounds = new google.maps.LatLngBounds();
       newBounds.union(bounds);
       bounds = newBounds;
@@ -537,7 +552,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
   private _handleMapTypeIdChange() {
     const s = this._mapsWrapper.subscribeToMapEvent<void>('maptypeid_changed').subscribe(() => {
       this._mapsWrapper.getMapTypeId().then(
-          (mapTypeId: string) => { this.mapTypeIdChange.emit(mapTypeId as MapTypeId); });
+          mapTypeId => { this.mapTypeIdChange.emit(mapTypeId); });
     });
     this._observableSubscriptions.push(s);
   }
@@ -554,7 +569,7 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
 
   private _handleIdleEvent() {
     const s = this._mapsWrapper.subscribeToMapEvent<void>('idle').subscribe(
-        () => { this.idle.emit(void 0); });
+      () => { this.idle.emit(void 0); });
     this._observableSubscriptions.push(s);
   }
 
@@ -562,7 +577,8 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
     interface Emitter {
       emit(value: any): void;
     }
-    type Event = {name: string, emitter: Emitter};
+
+    type Event = { name: string, emitter: Emitter };
 
     const events: Event[] = [
       {name: 'click', emitter: this.mapClick},
@@ -572,10 +588,20 @@ export class AgmMap implements OnChanges, OnInit, OnDestroy {
 
     events.forEach((e: Event) => {
       const s = this._mapsWrapper.subscribeToMapEvent<{latLng: google.maps.LatLng}>(e.name).subscribe(
-          (event: {latLng: google.maps.LatLng}) => {
-            const value = {coords: {lat: event.latLng.lat(), lng: event.latLng.lng()}} as MouseEvent;
-            e.emitter.emit(value);
-          });
+        (event: {latLng: google.maps.LatLng}) => {
+          let value: MouseEvent = {
+            coords: {
+              lat: event.latLng.lat(),
+              lng: event.latLng.lng(),
+            },
+            placeId: (event as {latLng: google.maps.LatLng, placeId: string}).placeId,
+          };
+          // the placeId will be undefined in case the event was not an IconMouseEvent (google types)
+          if (value.placeId && !this.showDefaultInfoWindow) {
+            (event as any).stop();
+          }
+          e.emitter.emit(value);
+        });
       this._observableSubscriptions.push(s);
     });
   }

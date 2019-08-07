@@ -13,7 +13,7 @@
   ],
   "peerDependencies": {
     "@angular/core": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@agm/core": "^1.0.0-beta.6",
+    "@agm/core": "^1.0.0-beta.7",
     "snazzy-info-window": "^1.1.0"
   },
   "ngPackage": {
@@ -24,7 +24,6 @@
         "@agm/core": "ngmaps.core"
       }
     },
-    "dest": "../../dist/@agm/snazzy-info-window",
-    "workingDirectory": "../../.tmp"
+    "dest": "../../dist/@agm/snazzy-info-window"
   }
 }

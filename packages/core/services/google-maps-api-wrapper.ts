@@ -2,6 +2,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 
+import { BicyclingLayerOptions, TransitLayerOptions } from '../map-types';
 import { MapsAPILoader } from './maps-api-loader/maps-api-loader';
 
 /**
@@ -93,6 +94,32 @@ export class GoogleMapsAPIWrapper {
       let data = new google.maps.Data(options);
       data.setMap(m);
       return data;
+    });
+  }
+
+  /**
+   * Creates a TransitLayer instance for a map
+   * @param {TransitLayerOptions} options - used for setting layer options
+   * @returns {Promise<TransitLayer>} a new transit layer object
+   */
+  createTransitLayer(options: TransitLayerOptions): Promise<google.maps.TransitLayer>{
+    return this._map.then((map: google.maps.Map) => {
+      let newLayer: google.maps.TransitLayer = new google.maps.TransitLayer();
+      newLayer.setMap(options.visible ? map : null);
+      return newLayer;
+    });
+  }
+
+  /**
+   * Creates a BicyclingLayer instance for a map
+   * @param {BicyclingLayerOptions} options - used for setting layer options
+   * @returns {Promise<BicyclingLayer>} a new bicycling layer object
+   */
+  createBicyclingLayer(options: BicyclingLayerOptions): Promise<google.maps.BicyclingLayer>{
+    return this._map.then((map: google.maps.Map) => {
+      let newLayer: google.maps.BicyclingLayer = new google.maps.BicyclingLayer();
+      newLayer.setMap(options.visible ? map : null);
+      return newLayer;
     });
   }
 

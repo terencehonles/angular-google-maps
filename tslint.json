@@ -43,7 +43,7 @@
     ],
     "radix": true,
     "semicolon": true,
-    "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
+    "trailing-comma": [true, {"multiline": [true, {"functions": "ignore"}], "singleline": "never"}],
     "triple-equals": [
       true,
       "allow-null-check"

@@ -1,5 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-
+import { AgmBicyclingLayer } from './directives/bicycling-layer';
 import { AgmCircle } from './directives/circle';
 import { AgmDataLayer } from './directives/data-layer';
 import { AgmFitBounds } from './directives/fit-bounds';
@@ -9,12 +9,12 @@ import { AgmMap } from './directives/map';
 import { AgmMarker } from './directives/marker';
 import { AgmPolygon } from './directives/polygon';
 import { AgmPolyline } from './directives/polyline';
+import { AgmPolylineIcon } from './directives/polyline-icon';
 import { AgmPolylinePoint } from './directives/polyline-point';
 import { AgmRectangle } from './directives/rectangle';
-
+import { AgmTransitLayer } from './directives/transit-layer';
 import { LAZY_MAPS_API_CONFIG, LazyMapsAPILoader, LazyMapsAPILoaderConfigLiteral } from './services/maps-api-loader/lazy-maps-api-loader';
 import { MapsAPILoader } from './services/maps-api-loader/maps-api-loader';
-
 import { BROWSER_GLOBALS_PROVIDERS } from './utils/browser-globals';
 
 /**
@@ -24,7 +24,8 @@ export function coreDirectives() {
   return [
     AgmMap, AgmMarker, AgmInfoWindow, AgmCircle, AgmRectangle,
     AgmPolygon, AgmPolyline, AgmPolylinePoint, AgmKmlLayer,
-    AgmDataLayer, AgmFitBounds,
+    AgmDataLayer, AgmFitBounds, AgmPolylineIcon, AgmTransitLayer,
+    AgmBicyclingLayer,
   ];
 }
 

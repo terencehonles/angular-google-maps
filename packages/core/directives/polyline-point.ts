@@ -3,7 +3,7 @@ import { Directive, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 /**
  * AgmPolylinePoint represents one element of a polyline within a  {@link
- * SembGoogleMapPolyline}
+ * AgmPolyline}
  */
 @Directive({selector: 'agm-polyline-point'})
 export class AgmPolylinePoint implements OnChanges {
@@ -26,9 +26,9 @@ export class AgmPolylinePoint implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): any {
     if (changes['latitude'] || changes['longitude']) {
-      const position: google.maps.LatLngLiteral = {
-        lat: changes['latitude'].currentValue,
-        lng: changes['longitude'].currentValue,
+      const position = {
+        lat: changes['latitude'] ? changes['latitude'].currentValue : this.latitude,
+        lng: changes['longitude'] ? changes['longitude'].currentValue : this.longitude
       } as google.maps.LatLngLiteral;
       this.positionChanged.emit(position);
     }

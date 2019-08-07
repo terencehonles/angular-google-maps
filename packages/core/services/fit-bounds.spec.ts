@@ -18,17 +18,13 @@ describe('FitBoundsService', () => {
     latLngBoundsConstructs = 0;
     latLngBoundsExtend = jest.fn();
 
-    (window as any).google = {
-      maps: {
-        LatLngBounds: class LatLngBounds {
-          extend: jest.Mock = latLngBoundsExtend;
+    google.maps.LatLngBounds = class LatLngBounds {
+      extend = latLngBoundsExtend;
 
-          constructor() {
-            latLngBoundsConstructs += 1;
-          }
-        },
-      },
-    };
+      constructor() {
+        latLngBoundsConstructs += 1;
+      }
+    } as any;
 
     TestBed.configureTestingModule({
       providers: [
